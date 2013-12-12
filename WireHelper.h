@@ -1,14 +1,5 @@
 #include <Arduino.h>
 
-
-class WireHelperStatic
-{
-public:
-	WireHelperStatic()
-        {
-        	Wire.begin();
-        }
-};
 class WireHelper
 {
 public:
@@ -18,7 +9,8 @@ public:
 	static uint16_t read16(byte, byte);
 	static int16_t readS16(byte, byte);
 private:
-	static WireHelperStatic whs;
+	static bool hasBegun;
+	static void maybeBegin();
 	static byte genericRead();
 	static void genericWrite(byte);
 };

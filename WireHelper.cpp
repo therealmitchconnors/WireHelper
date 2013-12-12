@@ -5,13 +5,19 @@
 
 /**************************************************************************/
 /*!
-    @brief  wrapper for initializaion of the Wire library
+    @brief  wrapper for initializaion of the Wire library.  This method must
+    be called at every entry point to the WireHelper library.
 */
 /**************************************************************************/
-//WireHelperStatic::WireHelperStatic()
-//{
-//	Wire.begin();
-//}
+bool WireHelper::hasBegun;
+void WireHelper::maybeBegin()
+{
+  if(!hasBegun)
+  {
+    Wire.begin();
+    hasBegun = true;
+  }
+}
 
 /**************************************************************************/
 /*!
@@ -50,6 +56,7 @@ byte WireHelper::genericRead(void)
 /**************************************************************************/
 void WireHelper::write(byte deviceAddress, byte reg, byte value)
 {
+	maybeBegin();
 	Wire.beginTransmission(deviceAddress);
 	genericWrite(reg);
 	genericWrite(value);
@@ -75,6 +82,7 @@ byte WireHelper::read(byte deviceAddress, byte reg)
 /**************************************************************************/
 int WireHelper::read(byte deviceAddress, byte reg, int nbytes, byte *buffer)
 {
+	maybeBegin();
 	Wire.beginTransmission(deviceAddress);
 	genericWrite(reg);
 	Wire.endTransmission();
